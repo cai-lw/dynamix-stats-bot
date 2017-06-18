@@ -64,7 +64,7 @@ elif hour % 4 == 1:
     text = '{}, being tweeted {} times, is the most tweeted #Dynamix song in the past 24 hours!'.format(most_shared_song[0], len(most_shared_song[1]))
 elif hour % 4 == 2:
     most_shared_user =  max(user_count.items(), key=lambda p:p[1])
-    text = '@{}, tweeted {} scores, is the most active #Dynamix score tweeter in the past 24 hours!'.format(most_shared_user[0], most_shared_user[1])
+    text = 'The most active #Dynamix score tweeter in the past 24 hours is @{}, who tweeted {} scores!'.format(most_shared_user[0], most_shared_user[1])
 else:
     text = '#Dynamix players tweeted {} OMEGAs and {} PSIs in the past 24 hours. Congratulations!'.format(grade_count['OMEGA'], grade_count['PSI'])
 print(text)
