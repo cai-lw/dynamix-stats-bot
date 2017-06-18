@@ -56,7 +56,7 @@ while now - oldest_time < 86400:
     if now - oldest_time < 86400:
         results = api.GetSearch(raw_query=query_str + '&max_id={}'.format(oldest_id - 1))
 
-hour = 3#time.gmtime().tm_hour
+hour = time.gmtime().tm_hour
 if hour % 4 == 0:
     text = '{} users tweeted {} #Dynamix scores in the past 24 hours!'.format(len(user_count), score_count)
 elif hour % 4 == 1:
@@ -68,4 +68,4 @@ elif hour % 4 == 2:
 else:
     text = '#Dynamix players tweeted {} OMEGAs and {} PSIs in the past 24 hours. Congratulations!'.format(grade_count['OMEGA'], grade_count['PSI'])
 print(text)
-#api.PostUpdate(text)
+api.PostUpdate(text)
