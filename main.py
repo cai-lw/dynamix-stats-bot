@@ -3,7 +3,6 @@ import os
 import re
 import time
 import calendar
-from pprint import pprint
 from collections import defaultdict
 
 re_score_zh = re.compile(r'^在樂曲(?P<song>.+)中取得(?P<grade>\w+) Grade。分數 (?P<score>\d{7}) \#Dynamix$')
@@ -14,7 +13,7 @@ re_score = [re_score_zh, re_score_ja, re_score_en]
 valid_sources = {'<a href="http://www.apple.com" rel="nofollow">iOS</a>',
                  '<a href="http://dynamix.c4-cat.com" rel="nofollow">Mobile Music Game - Dynamix</a>'}
 now = time.time()
-song_stats = defaultdict(lambda: set())
+song_count = defaultdict(lambda: 0)
 user_count = defaultdict(lambda: 0)
 grade_count = defaultdict(lambda: 0)
 score_count = 0
@@ -51,7 +50,7 @@ while now - oldest_time < 86400:
         oldest_id = min(res.id, oldest_id)
         score_count += 1
         grade_count[grade] += 1
-        song_stats[song].add(res.user.screen_name)
+        song_count[song] += 1
         user_count[res.user.screen_name] += 1
     if now - oldest_time < 86400:
         results = api.GetSearch(raw_query=query_str + '&max_id={}'.format(oldest_id - 1))
@@ -60,8 +59,8 @@ hour = time.gmtime().tm_hour
 if hour % 4 == 0:
     text = '{} users tweeted {} #Dynamix scores in the past 24 hours!'.format(len(user_count), score_count)
 elif hour % 4 == 1:
-    most_shared_song = max(song_stats.items(), key=lambda p:len(p[1]))
-    text = '{}, being tweeted {} times, is the most tweeted #Dynamix song in the past 24 hours!'.format(most_shared_song[0], len(most_shared_song[1]))
+    most_shared_song = max(song_count.items(), key=lambda p:p[1])
+    text = '{}, being tweeted {} times, is the most tweeted #Dynamix song in the past 24 hours!'.format(most_shared_song[0], most_shared_song[1])
 elif hour % 4 == 2:
     most_shared_user =  max(user_count.items(), key=lambda p:p[1])
     text = 'The most active #Dynamix score tweeter in the past 24 hours is @{}, who tweeted {} scores!'.format(most_shared_user[0], most_shared_user[1])
