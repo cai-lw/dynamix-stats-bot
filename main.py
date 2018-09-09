@@ -57,14 +57,14 @@ while now - oldest_time < 86400:
 
 hour = time.gmtime().tm_hour
 if hour % 4 == 0:
-    text = '{} users tweeted {} #Dynamix scores in the past 24 hours!'.format(len(user_count), score_count)
+    text = '{0} users tweeted {1} #Dynamix scores in the past 24 hours!\n過去24時間に{0}人が#Dynamix のスコアを{1}回ツイートしました！'.format(len(user_count), score_count)
 elif hour % 4 == 1:
     most_shared_song = max(song_count.items(), key=lambda p:p[1])
-    text = '{}, being tweeted {} times, is the most tweeted #Dynamix song in the past 24 hours!'.format(most_shared_song[0], most_shared_song[1])
+    text = '{0}, being tweeted {1} times, is the most tweeted #Dynamix song in the past 24 hours!\n24時間で最も多く#Dynamix のスコアツイートがあった曲は{0}で、{1}回でした！'.format(most_shared_song[0], most_shared_song[1])
 elif hour % 4 == 2:
     most_shared_user =  max(user_count.items(), key=lambda p:p[1])
-    text = 'The most active #Dynamix score tweeter in the past 24 hours is @{}, who tweeted {} scores!'.format(most_shared_user[0], most_shared_user[1])
+    text = 'The most active #Dynamix score tweeter in the past 24 hours is @{0}, who tweeted {1} scores!\n24時間で最も多く#Dynamix のスコアをツイートしたのは@{0} さん、{1}回でした！'.format(most_shared_user[0], most_shared_user[1])
 else:
-    text = '#Dynamix players tweeted {} OMEGAs and {} PSIs in the past 24 hours. Congratulations!'.format(grade_count['OMEGA'], grade_count['PSI'])
+    text = '#Dynamix players tweeted {0} OMEGAs and {1} PSIs in the past 24 hours. Congratulations!\n過去24時間の#Dynamix のスコアツイートのうち、{0}回がΩ、{1}回がΨでした。おめでとう！'.format(grade_count['OMEGA'], grade_count['PSI'])
 print(text)
 api.PostUpdate(text)

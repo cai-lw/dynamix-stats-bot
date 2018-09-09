@@ -13,4 +13,4 @@ if len(followback_ids) > 0:
         for user in api.UsersLookup(user_id=followback_ids[batch * 100:(batch + 1) * 100]):
             if not user.protected:
                 print('Followed @' + user.screen_name)
-                api.CreateFriendship(user.id)
+                api.CreateFriendship(user_id=user.id)
