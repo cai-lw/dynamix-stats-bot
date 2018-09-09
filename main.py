@@ -4,6 +4,12 @@ import re
 import time
 import calendar
 from collections import defaultdict
+from sys import exit
+
+hour = time.gmtime().tm_hour
+if hour % 3 != 0:
+    exit()
+tweet_type = (hour // 3) % 4
 
 re_score_zh = re.compile(r'^在樂曲(?P<song>.+)中取得(?P<grade>\w+) Grade。分數 (?P<score>\d{7}) \#Dynamix$')
 re_score_ja = re.compile(r'^(?P<song>.+)で(?P<grade>\w+)ランク、(?P<score>\d{7})点を獲得しました。 \#Dynamix$')
@@ -55,16 +61,16 @@ while now - oldest_time < 86400:
     if now - oldest_time < 86400:
         results = api.GetSearch(raw_query=query_str + '&max_id={}'.format(oldest_id - 1))
 
-hour = time.gmtime().tm_hour
-if hour % 4 == 0:
+if tweet_type == 0:
     text = '{0} users tweeted {1} #Dynamix scores in the past 24 hours!\n過去24時間に{0}人が#Dynamix のスコアを{1}回ツイートしました！'.format(len(user_count), score_count)
-elif hour % 4 == 1:
+elif tweet_type == 1:
     most_shared_song = max(song_count.items(), key=lambda p:p[1])
     text = '{0}, being tweeted {1} times, is the most tweeted #Dynamix song in the past 24 hours!\n24時間で最も多く#Dynamix のスコアツイートがあった曲は{0}で、{1}回でした！'.format(most_shared_song[0], most_shared_song[1])
-elif hour % 4 == 2:
-    most_shared_user =  max(user_count.items(), key=lambda p:p[1])
+elif tweet_type == 2:
+    most_shared_user = max(user_count.items(), key=lambda p:p[1])
     text = 'The most active #Dynamix score tweeter in the past 24 hours is @{0}, who tweeted {1} scores!\n24時間で最も多く#Dynamix のスコアをツイートしたのは@{0} さん、{1}回でした！'.format(most_shared_user[0], most_shared_user[1])
-else:
+elif tweet_type == 3:
     text = '#Dynamix players tweeted {0} OMEGAs and {1} PSIs in the past 24 hours. Congratulations!\n過去24時間の#Dynamix のスコアツイートのうち、{0}回がΩ、{1}回がΨでした。おめでとう！'.format(grade_count['OMEGA'], grade_count['PSI'])
+
 print(text)
 api.PostUpdate(text)
